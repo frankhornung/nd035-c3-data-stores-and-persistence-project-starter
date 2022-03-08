@@ -5,6 +5,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.DayOfWeek;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
@@ -76,9 +77,18 @@ public class UserController {
         //throw new UnsupportedOperationException();
     }
 
+    private List<EmployeeDTO> availableEmployeesToDTO(List<Employee> employeeList){
+        List<EmployeeDTO> employeeDTOList = new ArrayList<EmployeeDTO>();
+        for( Employee e : employeeList){
+            employeeDTOList.add(employeePojoToDTO(e));
+        }
+        return employeeDTOList;
+    }
+
     @GetMapping("/employee/availability")
     public List<EmployeeDTO> findEmployeesForService(@RequestBody EmployeeRequestDTO employeeDTO) {
-        throw new UnsupportedOperationException();
+        return availableEmployeesToDTO(employeeService.findEmployeesForService(employeeDTO.getDate(),employeeDTO.getSkills()));
+        //throw new UnsupportedOperationException();
     }
 
 }
