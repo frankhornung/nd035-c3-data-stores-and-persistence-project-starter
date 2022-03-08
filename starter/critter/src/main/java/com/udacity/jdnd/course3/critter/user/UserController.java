@@ -1,5 +1,6 @@
 package com.udacity.jdnd.course3.critter.user;
 
+import net.minidev.json.writer.BeansMapper;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -21,10 +22,11 @@ public class UserController {
 
     private final UserService userService;
     private final EmployeeService employeeService;
+    private final CustomerService customerService;
 
     //@Autowired
-    public UserController(UserService userService, EmployeeService employeeService){
-
+    public UserController(UserService userService, EmployeeService employeeService, CustomerService customerService){
+        this.customerService=customerService;
         this.userService=userService;
         this.employeeService=employeeService;
     }
@@ -41,9 +43,31 @@ public class UserController {
         return employeeDTO;
     }
 
+    private List<EmployeeDTO> availableEmployeesToDTO(List<Employee> employeeList){
+        List<EmployeeDTO> employeeDTOList = new ArrayList<EmployeeDTO>();
+        for( Employee e : employeeList){
+            employeeDTOList.add(employeePojoToDTO(e));
+        }
+        return employeeDTOList;
+    }
+
+    private Customer customerDTOtoPojo(CustomerDTO customerDTO){
+        Customer customer = new Customer();
+        BeanUtils.copyProperties(customerDTO, customer);
+        return customer;
+    }
+
+    private CustomerDTO customerPojoToDTO(Customer customer){
+        CustomerDTO customerDTO = new CustomerDTO();
+        BeanUtils.copyProperties(customer, customerDTO);
+        return customerDTO;
+    }
+
     @PostMapping("/customer")
     public CustomerDTO saveCustomer(@RequestBody CustomerDTO customerDTO){
-        throw new UnsupportedOperationException();
+        Customer newCustomer = customerService.saveCustomer(customerDTOtoPojo(customerDTO));
+        return customerPojoToDTO(newCustomer);
+        //throw new UnsupportedOperationException();
     }
 
     @GetMapping("/customer")
@@ -75,14 +99,6 @@ public class UserController {
     public void setAvailability(@RequestBody Set<DayOfWeek> daysAvailable, @PathVariable long employeeId) {
         employeeService.setAvailability(employeeId, daysAvailable);
         //throw new UnsupportedOperationException();
-    }
-
-    private List<EmployeeDTO> availableEmployeesToDTO(List<Employee> employeeList){
-        List<EmployeeDTO> employeeDTOList = new ArrayList<EmployeeDTO>();
-        for( Employee e : employeeList){
-            employeeDTOList.add(employeePojoToDTO(e));
-        }
-        return employeeDTOList;
     }
 
     @GetMapping("/employee/availability")
