@@ -1,5 +1,6 @@
 package com.udacity.jdnd.course3.critter.pet;
 
+import com.udacity.jdnd.course3.critter.user.Customer;
 import org.hibernate.annotations.Nationalized;
 
 import javax.persistence.*;
@@ -8,7 +9,7 @@ import java.time.LocalDate;
 @Entity
 public class Pet {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @Nationalized
@@ -21,6 +22,18 @@ public class Pet {
 
     @Column(length = 1024)
     private String notes;
+
+    @ManyToOne
+    //@JoinColumn(name="customer_id")
+    private Customer customer;
+
+    public Customer getCustomer() {
+        return customer;
+    }
+
+    public void setCustomer(Customer customer) {
+        this.customer = customer;
+    }
 
     public Long getId() {
         return id;

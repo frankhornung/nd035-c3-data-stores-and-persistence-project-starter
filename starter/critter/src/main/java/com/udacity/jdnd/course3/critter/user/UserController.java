@@ -1,5 +1,7 @@
 package com.udacity.jdnd.course3.critter.user;
 
+import com.udacity.jdnd.course3.critter.pet.Pet;
+import com.udacity.jdnd.course3.critter.pet.PetService;
 import net.minidev.json.writer.BeansMapper;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,12 +25,14 @@ public class UserController {
     private final UserService userService;
     private final EmployeeService employeeService;
     private final CustomerService customerService;
+    private final PetService petService;
 
     //@Autowired
-    public UserController(UserService userService, EmployeeService employeeService, CustomerService customerService){
+    public UserController(UserService userService, EmployeeService employeeService, CustomerService customerService, PetService petService){
         this.customerService=customerService;
         this.userService=userService;
         this.employeeService=employeeService;
+        this.petService=petService;
     }
 
     private Employee employeeDTOtoPojo(EmployeeDTO employeeDTO){
@@ -54,12 +58,31 @@ public class UserController {
     private Customer customerDTOtoPojo(CustomerDTO customerDTO){
         Customer customer = new Customer();
         BeanUtils.copyProperties(customerDTO, customer);
+        // TODO add code for populating the petIDs list in the DTO
+        List<Pet> pets = new ArrayList<Pet>();
+        if(customerDTO.getPetIds() != null){
+            List<Long> petIds = customerDTO.getPetIds();
+            for(Long petId : petIds){
+                pets.add(petService.getPetById(petId));
+            }
+        }
+
+        customer.setPets(pets);
         return customer;
     }
 
     private CustomerDTO customerPojoToDTO(Customer customer){
         CustomerDTO customerDTO = new CustomerDTO();
         BeanUtils.copyProperties(customer, customerDTO);
+        List<Long> petIds = new ArrayList<Long>();
+        List<Pet> pets = customer.getPets();
+        if(pets != null){
+            for(Pet p : pets){
+                petIds.add(p.getId());
+            }
+            customerDTO.setPetIds(petIds);
+        }
+
         return customerDTO;
     }
 
@@ -80,10 +103,12 @@ public class UserController {
         return customersDTO;
         //throw new UnsupportedOperationException();
     }
-
+    // TODO
     @GetMapping("/customer/pet/{petId}")
     public CustomerDTO getOwnerByPet(@PathVariable long petId){
-        throw new UnsupportedOperationException();
+        Customer customer = customerService.getCustomerByPetID(petId);
+        return customerPojoToDTO(customer);
+        //throw new UnsupportedOperationException();
     }
 
     @PostMapping("/employee")
