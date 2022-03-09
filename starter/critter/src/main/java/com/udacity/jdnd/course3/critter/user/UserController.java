@@ -72,7 +72,13 @@ public class UserController {
 
     @GetMapping("/customer")
     public List<CustomerDTO> getAllCustomers(){
-        throw new UnsupportedOperationException();
+        List<CustomerDTO> customersDTO = new ArrayList<CustomerDTO>();
+        List<Customer> customers = customerService.getAllCustomers();
+        for (Customer c : customers){
+            customersDTO.add(customerPojoToDTO(c));
+        }
+        return customersDTO;
+        //throw new UnsupportedOperationException();
     }
 
     @GetMapping("/customer/pet/{petId}")
