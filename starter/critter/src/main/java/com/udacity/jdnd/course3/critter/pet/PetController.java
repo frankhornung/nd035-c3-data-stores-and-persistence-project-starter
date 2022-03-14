@@ -64,7 +64,13 @@ public class PetController {
     // TODO
     @GetMapping
     public List<PetDTO> getPets(){
-        throw new UnsupportedOperationException();
+        List<PetDTO> petsDTO = new ArrayList<PetDTO>();
+        List<Pet> pets = petService.getPets();
+        for(Pet p : pets){
+            petsDTO.add(petPojoToDTO(p));
+        }
+        return petsDTO;
+        //throw new UnsupportedOperationException();
     }
 
     // x1 newly implemented

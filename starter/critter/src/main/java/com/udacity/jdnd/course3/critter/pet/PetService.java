@@ -37,6 +37,10 @@ public class PetService {
         return savedPet;
     }
 
+    public List<Pet> getPets(){
+        return petRepository.findAll();
+    }
+
 
     public Pet getPetById(Long petId){
         Pet pet = new Pet();
