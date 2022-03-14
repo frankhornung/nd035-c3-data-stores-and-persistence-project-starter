@@ -50,24 +50,17 @@ public class EmployeeService {
         DayOfWeek day = date.getDayOfWeek();
         System.out.println(day);
         String dayName = day.toString();
-        //List<Employee> allEmployees = employeeRepository.findByDaysAvailableContains(day);
-        //List<Employee> allEmployees = employeeRepository.findBySkillsIn(skillSet);
-        List<Employee> allEmployees = employeeRepository.findBySkillsInAndDaysAvailableContains(skillSet,day);
 
-        //List<Employee> allEmployees = employeeRepository.findBySkillsContains(skillSet);
-        //List<Employee> allEmployees = employeeRepository.findAll();
+        List<Employee> potentialEmployeesMatchingDateAndSkillSet = employeeRepository.findBySkillsInAndDaysAvailableContains(skillSet,day);
 
-        List<Employee> skilledAndAvailableEmployees = new ArrayList<Employee>();
+        // we need to be sure that the potential employees really have "all" required skills
+        List<Employee> skilledAndAvailableEmployees = new ArrayList<>();
         // https://stackoverflow.com/questions/32348453/python-counter-alternative-for-java
         final Map<Long, Integer> counter = new HashMap<>();
-        for( Employee e : allEmployees){
-            System.out.println(e.getName());
+        for( Employee e : potentialEmployeesMatchingDateAndSkillSet){
             counter.merge(e.getId(),1, Integer::sum);
         }
-        System.out.println("xxxxxxxxxxxxx");
         for(  Long id : counter.keySet()){
-            System.out.println(id);
-            System.out.println(counter.get(id));
             if(counter.get(id) >= skillSet.size()){
                 Optional<Employee> optionalEmployee = employeeRepository.findById(id);
                 if (optionalEmployee.isPresent()){

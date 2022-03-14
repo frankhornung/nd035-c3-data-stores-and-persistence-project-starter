@@ -20,13 +20,10 @@ import java.util.List;
 public class ScheduleController {
 
     private final EmployeeService employeeService;
-    private final CustomerService customerService;
     private final PetService petService;
     private final ScheduleService scheduleService;
 
-    //@Autowired
-    public ScheduleController(EmployeeService employeeService, CustomerService customerService, PetService petService, ScheduleService scheduleService){
-        this.customerService=customerService;
+    public ScheduleController(EmployeeService employeeService,  PetService petService, ScheduleService scheduleService){
         this.employeeService=employeeService;
         this.petService=petService;
         this.scheduleService=scheduleService;
@@ -82,6 +79,7 @@ public class ScheduleController {
         return scheduleDTOs;
     }
 
+    // DTO for frontend(api) usage needs to be converted for internally used object representation
     public Schedule scheduleDTOToPojo(ScheduleDTO dto) {
         Schedule schedule = new Schedule();
         BeanUtils.copyProperties(dto,schedule);
@@ -101,6 +99,7 @@ public class ScheduleController {
         return schedule;
     }
 
+    // intenally used object needs to be converted to externally visible DTO structure
     public ScheduleDTO schedulePojoToDTO(Schedule schedule){
         ScheduleDTO scheduleDTO = new ScheduleDTO();
         BeanUtils.copyProperties(schedule, scheduleDTO);

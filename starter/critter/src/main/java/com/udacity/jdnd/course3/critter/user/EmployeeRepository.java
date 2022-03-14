@@ -9,11 +9,7 @@ import java.util.Set;
 
 @Repository
 public interface EmployeeRepository extends JpaRepository<Employee, Long> {
-    List<Employee> findByDaysAvailableContains(DayOfWeek day);
-    List<Employee> findBySkillsIn(Set skills);
-    //List<Employee> findBySkillsContains(Set skills);
-
     // this returns a list of employees that are available on that day of week AND are having at least one of the required skills
-    // This requires further checking in the service layer if the employee really has all of the required skills.
+    // This requires further checking in the service layer if the employee really has all required skills.
     List<Employee> findBySkillsInAndDaysAvailableContains(Set<EmployeeSkill> skills, DayOfWeek day);
 }
