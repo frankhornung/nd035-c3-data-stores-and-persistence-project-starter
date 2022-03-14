@@ -2,10 +2,7 @@ package com.udacity.jdnd.course3.critter.schedule;
 
 import com.udacity.jdnd.course3.critter.pet.Pet;
 import com.udacity.jdnd.course3.critter.pet.PetService;
-import com.udacity.jdnd.course3.critter.user.CustomerService;
-import com.udacity.jdnd.course3.critter.user.Employee;
-import com.udacity.jdnd.course3.critter.user.EmployeeService;
-import com.udacity.jdnd.course3.critter.user.UserService;
+import com.udacity.jdnd.course3.critter.user.*;
 import org.springframework.beans.BeanUtils;
 import org.springframework.web.bind.annotation.*;
 
@@ -55,21 +52,34 @@ public class ScheduleController {
     // this method is to return the list of schedules for a specific pet.
     @GetMapping("/pet/{petId}")
     public List<ScheduleDTO> getScheduleForPet(@PathVariable long petId) {
-        throw new UnsupportedOperationException();
+        List<ScheduleDTO> scheduleDTOs = new ArrayList<ScheduleDTO>();
+        for (Schedule s : scheduleService.getSchedulesForPet(petId)){
+            scheduleDTOs.add(schedulePojoToDTO(s));
+        }
+        return scheduleDTOs;
     }
 
     // an employee can have multiple schedules for taking care of multiple pets
     // this method is to return the list of schedules for a specific employee
     @GetMapping("/employee/{employeeId}")
     public List<ScheduleDTO> getScheduleForEmployee(@PathVariable long employeeId) {
-        throw new UnsupportedOperationException();
+        List<ScheduleDTO> scheduleDTOs = new ArrayList<ScheduleDTO>();
+        for (Schedule s : scheduleService.getSchedulesForEmployee(employeeId)){
+            scheduleDTOs.add(schedulePojoToDTO(s));
+        }
+        return scheduleDTOs;
     }
 
     // a customer may have booked several petting schedules for his pets
     // return all the schedules booked by a specific customer
     @GetMapping("/customer/{customerId}")
     public List<ScheduleDTO> getScheduleForCustomer(@PathVariable long customerId) {
-        throw new UnsupportedOperationException();
+
+        List<ScheduleDTO> scheduleDTOs = new ArrayList<ScheduleDTO>();
+        for (Schedule s : scheduleService.getSchedulesForCustomer(customerId)){
+            scheduleDTOs.add(schedulePojoToDTO(s));
+        }
+        return scheduleDTOs;
     }
 
     public Schedule scheduleDTOToPojo(ScheduleDTO dto) {
