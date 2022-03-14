@@ -58,7 +58,7 @@ public class UserController {
     private Customer customerDTOtoPojo(CustomerDTO customerDTO){
         Customer customer = new Customer();
         BeanUtils.copyProperties(customerDTO, customer);
-        // TODO add code for populating the petIDs list in the DTO
+
         List<Pet> pets = new ArrayList<Pet>();
         if(customerDTO.getPetIds() != null){
             List<Long> petIds = customerDTO.getPetIds();
@@ -74,6 +74,7 @@ public class UserController {
     private CustomerDTO customerPojoToDTO(Customer customer){
         CustomerDTO customerDTO = new CustomerDTO();
         BeanUtils.copyProperties(customer, customerDTO);
+
         List<Long> petIds = new ArrayList<Long>();
         List<Pet> pets = customer.getPets();
         if(pets != null){

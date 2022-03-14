@@ -6,6 +6,7 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -16,19 +17,12 @@ import java.util.List;
 public class PetController {
 
     // DTO concept see Lesson 2 - 19
+    // https://knowledge.udacity.com/questions/812602
     private Pet petDTOToPojo(PetDTO petDTO){
         Pet pet = new Pet();
         BeanUtils.copyProperties(petDTO, pet);
-
         Customer customer = customerService.getCustomerByID(petDTO.getOwnerId());
-        List<Pet> customerPets = customer.getPets();
-        if(petDTO.getOwnerId() >0){
-            customerPets.add(pet);
-            customerService.saveCustomer(customer);
-        }
-
         pet.setCustomer(customer);
-
         return pet;
     }
 
@@ -60,10 +54,11 @@ public class PetController {
         //throw new UnsupportedOperationException();
     }
 
-    // TODO
+    // x1 newly implemented
     @GetMapping("/{petId}")
     public PetDTO getPet(@PathVariable long petId) {
-        throw new UnsupportedOperationException();
+        return petPojoToDTO(petService.getPetById(petId));
+        //throw new UnsupportedOperationException();
     }
 
     // TODO
@@ -72,10 +67,17 @@ public class PetController {
         throw new UnsupportedOperationException();
     }
 
-    // TODO
+    // x1 newly implemented
     @GetMapping("/owner/{ownerId}")
     public List<PetDTO> getPetsByOwner(@PathVariable long ownerId) {
-        throw new UnsupportedOperationException();
+        Customer customer = customerService.getCustomerByID(ownerId);
+        List<Pet> pets = customer.getPets();
+        List<PetDTO> petDTOList = new ArrayList<PetDTO>();
+        for ( Pet p : pets ){
+            petDTOList.add(petPojoToDTO(p));
+        }
+        return petDTOList;
+        //throw new UnsupportedOperationException();
     }
 
 }

@@ -251,6 +251,8 @@ public class CritterFunctionalTest {
         CustomerDTO customerDTO = new CustomerDTO();
         customerDTO.setName("TestEmployee");
         customerDTO.setPhoneNumber("123-456-789");
+        // TODO remove following line
+        //customerDTO.setId(1);
         return customerDTO;
     }
 
@@ -258,6 +260,8 @@ public class CritterFunctionalTest {
         PetDTO petDTO = new PetDTO();
         petDTO.setName("TestPet");
         petDTO.setType(PetType.CAT);
+        // TODO remove following line
+        //petDTO.setId(1);
         return petDTO;
     }
 
