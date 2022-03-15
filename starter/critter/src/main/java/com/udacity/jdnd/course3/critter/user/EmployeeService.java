@@ -1,12 +1,14 @@
 package com.udacity.jdnd.course3.critter.user;
 
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityNotFoundException;
 import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.util.*;
 
+@Transactional
 @Service
 public class EmployeeService {
 
